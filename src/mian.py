@@ -29,7 +29,8 @@ def main() -> None:
                 MessageHandler(Filters.location, commands.location),
                 CommandHandler('skip', commands.skip_location),
             ],
-            BIO: [MessageHandler(Filters.text & ~Filters.command, commands.bio)],
+            BIO: [MessageHandler(Filters.text & ~Fi
+            lters.command, commands.bio)],
         },
         fallbacks=[CommandHandler('cancel', commands.cancel)],
     )
