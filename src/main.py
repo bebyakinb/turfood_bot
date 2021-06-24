@@ -5,7 +5,7 @@ from telegram.ext import (Updater,
                           CommandHandler,
                           MessageHandler,
                           Filters,
-                          ConversationHandler)
+                          ConversationHandler, )
 
 # src import
 from command import Command
@@ -19,18 +19,15 @@ def main() -> None:
     command = Command()
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
-
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', command.start)],
         states={
-            GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), command.gender)],
-            PHOTO: [MessageHandler(Filters.photo, command.photo), CommandHandler('skip', command.skip_photo)],
-            LOCATION: [
-                MessageHandler(Filters.location, command.location),
-                CommandHandler('skip', command.skip_location),
-            ],
-            BIO: [MessageHandler(Filters.text & ~Filters.command, command.bio)],
+            HIKE_TYPE: [MessageHandler(Filters.regex(r'^(' + '|'.join(map(str, HIKE_TYPES)) + ')$'), command.hike_type)],
+            DAYS: [MessageHandler(Filters.regex(r'^\d+$'), command.days)],
+            MEMBERS: [MessageHandler(Filters.regex(r'^\d+$'), command.members)],
+            VEGANS: [MessageHandler(Filters.regex(r'^\d+$'), command.vegans)],
+            VEGETARIANS: [MessageHandler(Filters.regex(r'^\d+$'), command.vegetarians)],
         },
         fallbacks=[CommandHandler('cancel', command.cancel)],
     )
