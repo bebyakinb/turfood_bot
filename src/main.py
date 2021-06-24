@@ -7,32 +7,32 @@ from telegram.ext import (Updater,
                           Filters,
                           ConversationHandler)
 
-#src import
-import commands
+# src import
+from command import Command
 from config import *
+
 
 def main() -> None:
     """Run the bot."""
     # Create the Updater and pass it your bot's token.
     updater = Updater(TOKEN, use_context=True)
-
+    command = Command()
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('start', command.start)],
         states={
-            GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), commands.gender)],
-            PHOTO: [MessageHandler(Filters.photo, commands.photo), CommandHandler('skip', commands.skip_photo)],
+            GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), command.gender)],
+            PHOTO: [MessageHandler(Filters.photo, command.photo), CommandHandler('skip', command.skip_photo)],
             LOCATION: [
-                MessageHandler(Filters.location, commands.location),
-                CommandHandler('skip', commands.skip_location),
+                MessageHandler(Filters.location, command.location),
+                CommandHandler('skip', command.skip_location),
             ],
-            BIO: [MessageHandler(Filters.text & ~Fi
-            lters.command, commands.bio)],
+            BIO: [MessageHandler(Filters.text & ~Filters.command, command.bio)],
         },
-        fallbacks=[CommandHandler('cancel', commands.cancel)],
+        fallbacks=[CommandHandler('cancel', command.cancel)],
     )
 
     dispatcher.add_handler(conv_handler)
